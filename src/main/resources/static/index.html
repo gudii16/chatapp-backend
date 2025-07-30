@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>STOMP WebSocket Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@6.1.2/bundles/stomp.umd.min.js"></script>
+</head>
+<body>
+<h2>STOMP Chat Test</h2>
+<label>Token</label>
+<input type="text" id="token" name="token">
+<button onclick="connect()">Connect</button>
+<br/><br/>
+<label>Sender</label>
+<input type="text" id="sender" name="sender">
+<br/>
+<label>Content</label>
+<input type="text" id="content" name="content">
+<br/>
+<label>RoomId</label>
+<input type="text" id="roomId" name="roomId">
+<br/><br/>
+<button onclick="sendMessage()">Send Message</button>
+
+<script>
+    let client;
+
+    function connect() {
+        const token = document.getElementById("token").value;
+        client = new StompJs.Client({
+        brokerURL: "ws://localhost:8080/ws?token=" + token,
+        reconnectDelay: 500000,
+        onConnect: () => {
+          console.log("Connected");
+
+          client.subscribe("/topic/general", message => {
+            console.log("Received:", message.body);
+            alert("Message: " + message.body);
+          });
+        },
+        onStompError: (frame) => {
+          console.error("STOMP Error", frame.headers["message"]);
+        }
+      });
+
+      client.activate();
+    }
+
+    function sendMessage() {
+        const sender = document.getElementById("sender").value;
+        const content = document.getElementById("content").value;
+        const roomId = document.getElementById("roomId").value;
+        const payload = {
+        "sender": sender,
+        "content": content,
+        "roomId": roomId
+      };
+
+      client.publish({
+        destination: "/app/chat.send",
+        body: JSON.stringify(payload),
+      });
+    }
+</script>
+</body>
+</html>
+</body>
+</html>
