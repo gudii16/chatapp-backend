@@ -1,7 +1,7 @@
 **Chat App Backend.**
 
 **Description**
-
+---
 A backend application where
 - A user can register themself.
 - Can login to create a jwt authentication token.
@@ -11,9 +11,11 @@ A backend application where
 - An authenticated user can receive the message broadcasted in a room at real time.
 
 **Prerequisites**
+---
 - Docker installed (no need for Java or Maven)
 
 **How to test**
+---
 - Download just the docker-compose.yml file.
 - In terminal navigate to path where docker-compose.yml is placed and run the command: docker-compose up
 - The application will start running.
